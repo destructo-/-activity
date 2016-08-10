@@ -4,6 +4,9 @@
 using namespace v8;
 
 namespace checker {
+  void spyActiveUser(const FunctionCallbackInfo<Value>& args);
+  void spyUnactiveUser(const FunctionCallbackInfo<Value>& args);
+
   int64_t lastInputTime() {
     LASTINPUTINFO li;
     li.cbSize = sizeof(LASTINPUTINFO);
@@ -20,13 +23,32 @@ namespace checker {
   }
 
   bool checkArguments(const FunctionCallbackInfo<Value>& args) {
-    if (args.Length() == 2 && args[0]->IsNumber() && args[1]->IsFunction()) {
+    if (args.Length() == 3 && args[0]->IsNumber() &&
+        args[1]->IsFunction() && args[2]->IsFunction()) {
       return true;
     }
     return false;
   }
 
-  void userActivitySpy(const FunctionCallbackInfo<Value>& args) {
+  void spyUnactiveUser(const FunctionCallbackInfo<Value>& args) {
+    Isolate* isolate = args.GetIsolate();
+    bool userActive = false;
+    int64_t delay = args[0]->IntegerValue();
+    Local<Function> callback = Local<Function>::Cast(args[2]);
+
+    do {
+      userActive = isUserActive(delay, lastInputTime());
+      if(userActive) {
+        const unsigned argc = 1;
+        Local<Value> argv[argc] = { String::NewFromUtf8(isolate, "user back") };
+        callback->Call(Null(isolate), argc, argv);
+
+        spyActiveUser(args);
+      }
+    } while(!userActive);
+  }
+
+  void spyActiveUser(const FunctionCallbackInfo<Value>& args) {
     Isolate* isolate = args.GetIsolate();
     bool userActive = true;
     int64_t delay = args[0]->IntegerValue();
@@ -38,6 +60,8 @@ namespace checker {
         const unsigned argc = 1;
         Local<Value> argv[argc] = { String::NewFromUtf8(isolate, "user gone") };
         callback->Call(Null(isolate), argc, argv);
+
+        spyUnactiveUser(args);
       }
     } while(userActive);
   }
@@ -48,7 +72,7 @@ namespace checker {
    */
   void method(const FunctionCallbackInfo<Value>& args) {
     if (checkArguments(args)) {
-      userActivitySpy(args);
+      spyActiveUser(args);
     } else {
       Isolate* isolate = args.GetIsolate();
       isolate->ThrowException(Exception::TypeError(
@@ -57,7 +81,7 @@ namespace checker {
   }
 
   void init(Local<Object> exports) {
-    NODE_SET_METHOD(exports, "ifUserGone",  method);
+    NODE_SET_METHOD(exports, "userActivitySpy",  method);
   }
 
   NODE_MODULE(checker, init)
