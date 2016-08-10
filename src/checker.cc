@@ -42,10 +42,10 @@ namespace checker {
         const unsigned argc = 1;
         Local<Value> argv[argc] = { String::NewFromUtf8(isolate, "user back") };
         callback->Call(Null(isolate), argc, argv);
-
-        spyActiveUser(args);
       }
     } while(!userActive);
+
+    spyActiveUser(args);
   }
 
   void spyActiveUser(const FunctionCallbackInfo<Value>& args) {
@@ -60,10 +60,10 @@ namespace checker {
         const unsigned argc = 1;
         Local<Value> argv[argc] = { String::NewFromUtf8(isolate, "user gone") };
         callback->Call(Null(isolate), argc, argv);
-
-        spyUnactiveUser(args);
       }
     } while(userActive);
+
+    spyUnactiveUser(args);
   }
 
   /**
