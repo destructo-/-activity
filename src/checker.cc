@@ -82,14 +82,14 @@ NAN_METHOD(AsyncSpyActive) {
   int points = To<int>(info[0]).FromJust();
   Callback *callback = new Callback(info[1].As<Function>());
 
-  AsyncQueueWorker(new PiWorker(points, callback, &spyActiveUser));
+  AsyncQueueWorker(new SpyWorker(points, callback, &spyActiveUser));
 }
 
 NAN_METHOD(AsyncSpyUnactive) {
   int points = To<int>(info[0]).FromJust();
   Callback *callback = new Callback(info[1].As<Function>());
 
-  AsyncQueueWorker(new PiWorker(points, callback, &spyUnactiveUser));
+  AsyncQueueWorker(new SpyWorker(points, callback, &spyUnactiveUser));
 }
 
 NAN_MODULE_INIT(InitAll) {
