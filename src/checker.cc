@@ -22,32 +22,34 @@ bool isUserActive(int delay, int lit) {
   return false;
 }
 
-int spyActiveUser(int delay) {
+bool spyActiveUser(int delay) {
     bool userActive = true;
 
     do {
       userActive = isUserActive(delay, lastInputTime());
       if(!userActive) {
-        return 42;
+        return true;
       }
     } while(userActive);
+    return false;
 }
 
-int spyUnactiveUser(int delay) {
+bool spyUnactiveUser(int delay) {
     bool userActive = false;
 
     do {
       userActive = isUserActive(delay, lastInputTime());
       if(userActive) {
-        return 42;
+        return true;
       }
     } while(!userActive);
+    return false;
 }
 
 class SpyWorker : public AsyncWorker {
  public:
-  SpyWorker(int delay, Callback *callback, int (*asyncMethod)(int))
-    : AsyncWorker(callback), delay(delay), estimate(0), asyncMethod(asyncMethod)  {}
+  SpyWorker(int delay, Callback *callback, bool (*asyncMethod)(int))
+    : AsyncWorker(callback), delay(delay), isSuccess(false), asyncMethod(asyncMethod)  {}
   ~SpyWorker() {}
 
   // Executed inside the worker-thread.
@@ -55,7 +57,7 @@ class SpyWorker : public AsyncWorker {
   // here, so everything we need for input and output
   // should go on `this`.
   void Execute () {
-    estimate = asyncMethod(delay);
+    isSuccess = asyncMethod(delay);
   }
 
   // Executed when the async work is complete
@@ -63,19 +65,14 @@ class SpyWorker : public AsyncWorker {
   // so it is safe to use V8 again
   void HandleOKCallback () {
     Nan::HandleScope scope;
-
-    Local<Value> argv[] = {
-        Null()
-      , New<Number>(estimate)
-    };
-
+    Local<Value> argv[1] = { New<Boolean>(isSuccess) };
     callback->Call(2, argv);
   }
 
  private:
   int delay;
-  int estimate;
-  int (*asyncMethod)(int);
+  bool isSuccess;
+  bool (*asyncMethod)(int);
 };
 
 NAN_METHOD(AsyncSpyActive) {
