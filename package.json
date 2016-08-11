@@ -11,7 +11,9 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "nan": "^2.4.0"
+  },
   "devDependencies": {
     "node-gyp": "^3.4.0"
   }
