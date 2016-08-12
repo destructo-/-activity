@@ -9,7 +9,7 @@ run cmd as admin
 npm install --global --production windows-build-tools
 ```
 
-# build native nide module
+# build native node module
 restart cmd (it's windows baby) 
 ```
 node-gyp configure
