@@ -76,17 +76,22 @@ class SpyWorker : public AsyncWorker {
 };
 
 NAN_METHOD(AsyncSpyActive) {
-  int points = To<int>(info[0]).FromJust();
+  int delay = To<int>(info[0]).FromJust();
   Callback *callback = new Callback(info[1].As<Function>());
 
-  AsyncQueueWorker(new SpyWorker(points, callback, &spyActiveUser));
+  AsyncQueueWorker(new SpyWorker(delay, callback, &spyActiveUser));
 }
 
 NAN_METHOD(AsyncSpyUnactive) {
-  int points = To<int>(info[0]).FromJust();
+  int delay = To<int>(info[0]).FromJust();
   Callback *callback = new Callback(info[1].As<Function>());
 
-  AsyncQueueWorker(new SpyWorker(points, callback, &spyUnactiveUser));
+  AsyncQueueWorker(new SpyWorker(delay, callback, &spyUnactiveUser));
+}
+
+NAN_METHOD(SetForegroundWindow) {
+  int64_t hwnd = To<int64_t>(info[0]).FromJust();
+  ::SetForegroundWindow(hwnd);
 }
 
 NAN_MODULE_INIT(InitAll) {
@@ -95,6 +100,9 @@ NAN_MODULE_INIT(InitAll) {
 
   Nan::Set(target, New<String>("spyUnactiveUser").ToLocalChecked(),
     GetFunction(New<FunctionTemplate>(AsyncSpyUnactive)).ToLocalChecked());
+
+  Nan::Set(target, New<string>("setForegroundWindow").ToLocalChecked(),
+    GetFunction(New<FunctionTemplate>(SetForegroundWindow)).ToLocalChecked());
 }
 
 NODE_MODULE(addon, InitAll)
