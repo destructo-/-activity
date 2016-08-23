@@ -89,8 +89,8 @@ NAN_METHOD(AsyncSpyUnactive) {
   AsyncQueueWorker(new SpyWorker(delay, callback, &spyUnactiveUser));
 }
 
-NAN_METHOD(SetForegroundWindow) {
-  int64_t hwnd = To<int64_t>(info[0]).FromJust();
+NAN_METHOD(SetActiveWindow) {
+  HWND hwnd = (HWND)info[0]->IntegerValue();
   ::SetForegroundWindow(hwnd);
 }
 
@@ -101,8 +101,8 @@ NAN_MODULE_INIT(InitAll) {
   Nan::Set(target, New<String>("spyUnactiveUser").ToLocalChecked(),
     GetFunction(New<FunctionTemplate>(AsyncSpyUnactive)).ToLocalChecked());
 
-  Nan::Set(target, New<string>("setForegroundWindow").ToLocalChecked(),
-    GetFunction(New<FunctionTemplate>(SetForegroundWindow)).ToLocalChecked());
+  Nan::Set(target, New<String>("setActiveWindow").ToLocalChecked(),
+    GetFunction(New<FunctionTemplate>(SetActiveWindow)).ToLocalChecked());
 }
 
 NODE_MODULE(addon, InitAll)
