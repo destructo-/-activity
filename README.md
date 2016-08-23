@@ -20,8 +20,8 @@ node-gyp build
 restart cmd too
 - clone electrone repo
 ```
-set HOME=C:\{path to electron repo}\.electron-gyp 
-node-gyp rebuild --target=<1.3.3 or other versions> --dist-url=https://atom.io/download/atom-shell
+set HOME=C:\{path to electron repo}\electron-gyp 
+node-gyp rebuild --target={1.3.3 or other versions} --dist-url=https://atom.io/download/atom-shell
 ```
 get build file from
 ```
