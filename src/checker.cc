@@ -90,7 +90,13 @@ NAN_METHOD(AsyncSpyUnactive) {
 }
 
 NAN_METHOD(SetActiveWindow) {
-  HWND hwnd = (HWND)info[0]->IntegerValue();
+  Local<String> name =
+      Nan::Get(info[0].As<Object>(), Nan::New("name").ToLocalChecked()).ToLocalChecked();
+
+  Nan::Utf8String val(name);
+  WindowName = *val;
+
+  HWND hwnd = ::FindWindow(NULL, _T(WindowName));
   ::SetForegroundWindow(hwnd);
 }
 
