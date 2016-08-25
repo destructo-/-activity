@@ -93,19 +93,17 @@ NAN_METHOD(SetActiveWindow) {
   std::string windowName = *Nan::Utf8String(info[0]);
 
   std::cout << windowName.c_str();
-  HWND Wnd = ::FindWindow(NULL, (LPCSTR)windowName.c_str());
-  std::cout << Wnd;
+  HWND windowHandler = ::FindWindow(NULL, (LPCSTR)windowName.c_str()), hCurWnd;
+  DWORD dwThreadID, dwCurThreadID, OldTimeOut;
+  std::cout << windowHandler;
 //   ::SetForegroundWindow(Wnd);
 //   ::SetActiveWindow(Wnd);
 //   ::SetFocus(Wnd);
 
-  HWND hCurWnd;
-
-  DWORD dwThreadID, dwCurThreadID, OldTimeOut;
-  if (!(Wnd == NULL || !IsWindow(Wnd))) {
+  if (windowHandler != NULL || IsWindow(windowHandler))) {
     SystemParametersInfo(SPI_GETFOREGROUNDLOCKTIMEOUT, 0, &OldTimeOut, 0);
     SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, NULL, 0);
-    SetWindowPos(Wnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+    SetWindowPos(windowHandler, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
     hCurWnd = GetForegroundWindow();
 
@@ -113,11 +111,11 @@ NAN_METHOD(SetActiveWindow) {
       dwThreadID = GetCurrentThreadId();
       dwCurThreadID = GetWindowThreadProcessId(hCurWnd, NULL);
       AttachThreadInput(dwThreadID, dwCurThreadID, true);
-      if (SetForegroundWindow(Wnd)) break;
+      if (SetForegroundWindow(windowHandler)) break;
       AttachThreadInput(dwThreadID, dwCurThreadID, false);
     }
 
-    SetWindowPos(Wnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+    SetWindowPos(windowHandler, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
     SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, &OldTimeOut, 0);
   }
 }
