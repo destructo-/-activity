@@ -73,6 +73,13 @@ class ActivateWorker : public AsyncWorker {
     bool isSuccess;
 };
 
+NAN_METHOD(ActivateWindow) {
+  std::string windowName = *Nan::Utf8String(info[0]);
+  HWND windowHandler = ::FindWindow(NULL, (LPCSTR)windowName.c_str());
+  bool isMaximize = To<bool>(info[1]).FromJust();
+  ActivateWindow(windowHandler, isMaximize);
+}
+
 NAN_METHOD(SetActiveWindow) {
   std::string windowName = *Nan::Utf8String(info[0]);
   HWND windowHandler = ::FindWindow(NULL, (LPCSTR)windowName.c_str());

@@ -21,6 +21,9 @@ NAN_MODULE_INIT(InitAll) {
 	
   Nan::Set(target, New<String>("getLastInputTime").ToLocalChecked(),
     GetFunction(New<FunctionTemplate>(GetLastInputTime)).ToLocalChecked());
+	
+  Nan::Set(target, New<String>("activateWindow").ToLocalChecked(),
+    GetFunction(New<FunctionTemplate>(ActivateWindow)).ToLocalChecked());
 }
 
 NODE_MODULE(addon, InitAll)

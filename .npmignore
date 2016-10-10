@@ -1,5 +1,5 @@
 node_modules
-src
+build
+README.md
 .idea
 .gitignore
-binding.gyp

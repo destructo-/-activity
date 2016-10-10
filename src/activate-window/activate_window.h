@@ -3,6 +3,7 @@
 
 #include <nan.h>
 
+NAN_METHOD(ActivateWindow);
 NAN_METHOD(SetActiveWindow);
 
 #endif  // ACTIVATE_WINDOW_NATIVE_NODE_NODULE
