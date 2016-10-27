@@ -1,11 +1,8 @@
 {
   "name": "spy-activity",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "",
   "main": "./bin/index.js",
-  "scripts": {
-
-  },
   "author": "",
   "license": "ISC",
   "dependencies": {
