@@ -1,0 +1,9 @@
+#ifndef ACTIVATE_WINDOW_NATIVE_NODE_NODULE
+#define ACTIVATE_WINDOW_NATIVE_NODE_NODULE
+
+#include <nan.h>
+
+NAN_METHOD(ActivateWindow);
+NAN_METHOD(SetActiveWindow);
+
+#endif  // ACTIVATE_WINDOW_NATIVE_NODE_NODULE
