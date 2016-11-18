@@ -9,13 +9,13 @@
           "sources": [
               "src/checker.cc",
               "src/activate-window/activate_window.cc",
-              "src/user-activity/user_activity.cc"
+              "src/user-activity/user_activity_win.cc"
           ],
       }],
       ['OS=="mac"', {
           "sources": [
               "src/checker.cc",
-              "src/user-activity/user_activity.cc"
+              "src/user-activity/user_activity_mac.cc"
           ],
       }],
     ]}
