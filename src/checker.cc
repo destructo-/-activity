@@ -5,6 +5,7 @@
 #include <node.h>
 #include "user-activity/user_activity.h"
 #include "activate-window/activate_window.h"
+#include "checker.h"
 
 using namespace v8;
 using namespace Nan;
