@@ -8,35 +8,46 @@
 using namespace v8;
 using namespace Nan;
 
-bool ActivateWindow(HWND windowHandler) {
-  HWND hCurWnd;
+bool ActivateWindow(HWND windowHandler, bool isMaximize) {
   DWORD dwThreadID, dwCurThreadID, OldTimeOut;
 
   if (windowHandler == NULL || !IsWindow(windowHandler)) return false;
+  if (GetForegroundWindow() == windowHandler) return true;
 
   SystemParametersInfo(SPI_GETFOREGROUNDLOCKTIMEOUT, 0, &OldTimeOut, 0);
   SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, NULL, 0);
   SetWindowPos(windowHandler, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
-  hCurWnd = GetForegroundWindow();
-
+  HWND hCurWnd = GetForegroundWindow();
+  bool isZoom = (IsZoomed(windowHandler) != 0);
+  
   while(true) {
     dwThreadID = GetCurrentThreadId();
     dwCurThreadID = GetWindowThreadProcessId(hCurWnd, NULL);
     AttachThreadInput(dwThreadID, dwCurThreadID, true);
-    if (SetForegroundWindow(windowHandler)) break;
+	
+	SetFocus(windowHandler);
+	ShowWindow(windowHandler, SW_RESTORE);
+    
+	if (SetForegroundWindow(windowHandler)) break;
     AttachThreadInput(dwThreadID, dwCurThreadID, false);
+	Sleep(250);
   }
 
   SetWindowPos(windowHandler, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
   SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, &OldTimeOut, 0);
+
+  if (isMaximize) {
+	SendMessage(windowHandler, WM_SYSCOMMAND, SC_MAXIMIZE, 0);
+  }
   return true;
 }
 
 class ActivateWorker : public AsyncWorker {
   public:
-    ActivateWorker(HWND window, Callback *callback)
-        : AsyncWorker(callback), window(window), isSuccess(false)  {}
+    ActivateWorker(HWND window, bool isMaximize, Callback *callback)
+        : AsyncWorker(callback), window(window), 
+			isMaximize(isMaximize), isSuccess(false)  {}
     ~ActivateWorker() {}
 
     // Executed inside the worker-thread.
@@ -44,7 +55,7 @@ class ActivateWorker : public AsyncWorker {
     // here, so everything we need for input and output
     // should go on `this`.
     void Execute () {
-        isSuccess = ActivateWindow(window);
+        isSuccess = ActivateWindow(window, isMaximize);
     }
 
     // Executed when the async work is complete
@@ -58,13 +69,22 @@ class ActivateWorker : public AsyncWorker {
 
   private:
     HWND window;
+	bool isMaximize;
     bool isSuccess;
 };
 
+NAN_METHOD(ActivateWindow) {
+  std::string windowName = *Nan::Utf8String(info[0]);
+  HWND windowHandler = ::FindWindow(NULL, (LPCSTR)windowName.c_str());
+  bool isMaximize = To<bool>(info[1]).FromJust();
+  ActivateWindow(windowHandler, isMaximize);
+}
+
 NAN_METHOD(SetActiveWindow) {
   std::string windowName = *Nan::Utf8String(info[0]);
-  HWND windowHandler = ::FindWindow(NULL, (LPCSTR)windowName.c_str()), hCurWnd;
-  Callback *callback = new Callback(info[1].As<Function>());
+  HWND windowHandler = ::FindWindow(NULL, (LPCSTR)windowName.c_str());
+  bool isMaximize = To<bool>(info[1]).FromJust();
+  Callback *callback = new Callback(info[2].As<Function>());
 
-  AsyncQueueWorker(new ActivateWorker(windowHandler, callback));
+  AsyncQueueWorker(new ActivateWorker(windowHandler, isMaximize, callback));
 }

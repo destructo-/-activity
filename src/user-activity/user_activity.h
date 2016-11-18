@@ -5,5 +5,6 @@
 
 NAN_METHOD(AsyncSpyActive);
 NAN_METHOD(AsyncSpyUnactive);
+NAN_METHOD(GetLastInputTime);
 
 #endif  // USER_ACTIVITY_NATIVE_NODE_NODULE

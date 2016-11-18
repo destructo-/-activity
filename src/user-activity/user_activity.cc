@@ -9,13 +9,12 @@ using namespace v8;
 using namespace Nan;
 
 int lastInputTime() {
-    LASTINPUTINFO li;
-    li.cbSize = sizeof(LASTINPUTINFO);
-    ::GetLastInputInfo(&li);
-
-    return ::GetTickCount() - li.dwTime;
-  }
-
+  LASTINPUTINFO li;
+  li.cbSize = sizeof(LASTINPUTINFO);
+  ::GetLastInputInfo(&li);
+  return ::GetTickCount() - li.dwTime;
+}
+  
 bool isUserActive(int delay, int lit) {
   if (delay >= lit) {
     return true;
@@ -31,6 +30,7 @@ bool spyActiveUser(int delay) {
       if(!userActive) {
         return true;
       }
+	  Sleep(1000);
     } while(userActive);
     return false;
 }
@@ -43,6 +43,7 @@ bool spyUnactiveUser(int delay) {
       if(userActive) {
         return true;
       }
+	  Sleep(1000);
     } while(!userActive);
     return false;
 }
@@ -75,6 +76,10 @@ class SpyWorker : public AsyncWorker {
     bool isSuccess;
     bool (*asyncMethod)(int);
 };
+
+NAN_METHOD(GetLastInputTime) {
+  info.GetReturnValue().Set(lastInputTime());
+}
 
 NAN_METHOD(AsyncSpyActive) {
   int delay = To<int>(info[0]).FromJust();
