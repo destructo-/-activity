@@ -12,6 +12,12 @@
               "src/user-activity/user_activity.cc"
           ],
       }],
+      ['OS=="mac"', {
+          "sources": [
+              "src/checker.cc",
+              "src/user-activity/user_activity.cc"
+          ],
+      }],
     ]}
   ]
 }
