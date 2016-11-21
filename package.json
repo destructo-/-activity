@@ -4,6 +4,7 @@
   "description": "",
   "main": "./bin/index.js",
   "scripts": {
+    "install": "node-gyp rebuild",
     "configure": "./node_modules/node-gyp/bin/node-gyp.js configure",
     "build": "./node_modules/node-gyp/bin/node-gyp.js build",
     "compile": "npm run configure && npm run build"
