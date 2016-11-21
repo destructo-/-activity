@@ -1,7 +1,6 @@
 #define _WINSOCKAPI_
 
 #include <nan.h>
-#include <windows.h>
 #include <node.h>
 #include "user-activity/user_activity.h"
 #include "activate-window/activate_window.h"
