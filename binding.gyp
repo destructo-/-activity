@@ -15,12 +15,15 @@
       ['OS=="mac"', {
           "sources": [
               "src/checker.cc",
-              "src/activate-window/activate_window_mac.cc",
+              "src/activate-window/activate_window.cc",
               "src/user-activity/user_activity_mac.cc"
           ],
       }],
       ['OS=="linux"', {
           "sources": [
+              "src/checker.cc",
+              "src/activate-window/activate_window.cc",
+              "src/user-activity/user_activity_linux.cc"
           ],
       }],
     ]}
