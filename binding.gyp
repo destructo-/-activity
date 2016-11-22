@@ -8,8 +8,19 @@
       ['OS=="win"', {
           "sources": [
               "src/checker.cc",
-              "src/activate-window/activate_window.cc",
-              "src/user-activity/user_activity.cc"
+              "src/activate-window/activate_window_win.cc",
+              "src/user-activity/user_activity_win.cc"
+          ],
+      }],
+      ['OS=="mac"', {
+          "sources": [
+              "src/checker.cc",
+              "src/activate-window/activate_window_mac.cc",
+              "src/user-activity/user_activity_mac.cc"
+          ],
+      }],
+      ['OS=="linux"', {
+          "sources": [
           ],
       }],
     ]}

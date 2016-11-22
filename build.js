@@ -1,6 +1,7 @@
 var exec = require('child_process').exec;
 var fs = require('fs');
 
+var electronVersion = '1.4.0';
 var archs = ['ia32', 'x64'];
 run(archs);
 
@@ -13,25 +14,25 @@ function run(archs) {
 		if (arch === 'ia32') {
 			fs.rename('./build/Release/checker.node', './bin/binary/checker_x32.node', (err) => {
 				if (err) {
-				  console.log(err);	
-				}				
+				  console.log(err);
+				}
 			});
 		} else {
 			fs.rename('./build/Release/checker.node', './bin/binary/checker.node', (err) => {
 				if (err) {
-				  console.log(err);	
+				  console.log(err);
 				}
 			});
-		}	
+		}
 		console.log(`success build ${arch}`);
 		var archsModified = archs.splice(0, archs.length -1);
 		run(archsModified);
-	});  
+	});
   }
 }
 
 function buildCommand(command, success) {
-	exec(command, function(error, stdout, stderr) {	
+	exec(command, function(error, stdout, stderr) {
     if (error !== null) {
         console.log('exec error: ' + error);
     } else {
@@ -55,7 +56,7 @@ function createFolder(path) {
 }
 
 function generateCommand(arch) {
-	var command = `node-gyp clean configure build --verbose	--target=1.4.0 --arch=${arch} --dist-url=https://atom.io/download/atom-shell`;
+	var command = `node-gyp clean configure build --verbose	--target=${electronVersion} --arch=${arch} --dist-url=https://atom.io/download/atom-shell`;
 	return command;
 }
 
