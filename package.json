@@ -9,9 +9,6 @@
     "build": "./node_modules/node-gyp/bin/node-gyp.js build",
     "compile": "npm run configure && npm run build"
   },
-  "publishConfig": {
-    "registry": "http://sonatype-nexus.livetex.ru/nexus/content/repositories/livetex-npm-new/"
-  },
   "author": "",
   "license": "ISC",
   "dependencies": {
