@@ -1,6 +1,6 @@
 {
   "name": "spy-activity",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "description": "",
   "main": "./bin/index.js",
   "scripts": {
@@ -8,6 +8,9 @@
     "configure": "./node_modules/node-gyp/bin/node-gyp.js configure",
     "build": "./node_modules/node-gyp/bin/node-gyp.js build",
     "compile": "npm run configure && npm run build"
+  },
+  "publishConfig": {
+    "registry": "http://sonatype-nexus.livetex.ru/nexus/content/repositories/livetex-npm-new/"
   },
   "author": "",
   "license": "ISC",
