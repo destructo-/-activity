@@ -8,7 +8,7 @@
 using namespace v8;
 using namespace Nan;
 
-NAN_METHOD(GetCurrentKeyboardLanguage) {
+string currentKeyboardLanguage () {
   GUITHREADINFO Gti;
   ::ZeroMemory ( &Gti,sizeof(GUITHREADINFO));
   Gti.cbSize = sizeof(GUITHREADINFO);

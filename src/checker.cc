@@ -16,6 +16,10 @@ NAN_METHOD(GetLastInputTime) {
   info.GetReturnValue().Set(lastInputTime);
 }
 
+NAN_METHOD(GetCurrentKeyboardLanguage) {
+  info.GetReturnValue().Set(currentKeyboardLanguage);
+}
+
 NAN_MODULE_INIT(InitAll) {
   Nan::Set(target, New<String>("setActiveWindow").ToLocalChecked(),
     GetFunction(New<FunctionTemplate>(SetActiveWindow)).ToLocalChecked());
