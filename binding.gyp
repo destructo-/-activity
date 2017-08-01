@@ -9,21 +9,24 @@
           "sources": [
               "src/checker.cc",
               "src/activate-window/activate_window_win.cc",
-              "src/user-activity/user_activity_win.cc"
+              "src/user-activity/user_activity_win.cc",
+              "src/keyboard-language/keyboard_language_win.cc"
           ],
       }],
       ['OS=="mac"', {
           "sources": [
               "src/checker.cc",
               "src/activate-window/activate_window.cc",
-              "src/user-activity/user_activity_mac.cc"
+              "src/user-activity/user_activity_mac.cc",
+              "src/keyboard-language/keyboard_language.cc"
           ],
       }],
       ['OS=="linux"', {
           "sources": [
               "src/checker.cc",
               "src/activate-window/activate_window.cc",
-              "src/user-activity/user_activity_linux.cc"
+              "src/user-activity/user_activity_linux.cc",
+              "src/keyboard-language/keyboard_language.cc"
           ],
           'variables': {
           	'pkg-config': 'pkg-config'

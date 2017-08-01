@@ -4,6 +4,7 @@
 #include <node.h>
 #include "user-activity/user_activity.h"
 #include "activate-window/activate_window.h"
+#include "keyboard-language/keyboard_language.h"
 #include "checker.h"
 
 using namespace v8;
@@ -24,6 +25,9 @@ NAN_MODULE_INIT(InitAll) {
 
   Nan::Set(target, New<String>("activateWindow").ToLocalChecked(),
     GetFunction(New<FunctionTemplate>(ActivateWindow)).ToLocalChecked());
+
+  Nan::Set(target, New<String>("getCurrentKeyboardLanguage").ToLocalChecked(),
+    GetFunction(New<FunctionTemplate>(GetCurrentKeyboardLanguage)).ToLocalChecked());
 }
 
 NODE_MODULE(checker, InitAll)
