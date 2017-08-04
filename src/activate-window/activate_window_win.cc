@@ -26,19 +26,20 @@ bool ActivateWindow(HWND windowHandler, bool isMaximize) {
     dwCurThreadID = GetWindowThreadProcessId(hCurWnd, NULL);
     AttachThreadInput(dwThreadID, dwCurThreadID, true);
 	
-	SetFocus(windowHandler);
-	ShowWindow(windowHandler, SW_RESTORE);
+    SetFocus(windowHandler);
+    ShowWindow(windowHandler, SW_RESTORE);
     
-	if (SetForegroundWindow(windowHandler)) break;
+    if (SetForegroundWindow(windowHandler)) break;
+
     AttachThreadInput(dwThreadID, dwCurThreadID, false);
-	Sleep(250);
+    Sleep(250);
   }
 
   SetWindowPos(windowHandler, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
   SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, &OldTimeOut, 0);
 
   if (isMaximize) {
-	SendMessage(windowHandler, WM_SYSCOMMAND, SC_MAXIMIZE, 0);
+    SendMessage(windowHandler, WM_SYSCOMMAND, SC_MAXIMIZE, 0);
   }
   return true;
 }
@@ -55,21 +56,21 @@ class ActivateWorker : public AsyncWorker {
     // here, so everything we need for input and output
     // should go on `this`.
     void Execute () {
-        isSuccess = ActivateWindow(window, isMaximize);
+      isSuccess = ActivateWindow(window, isMaximize);
     }
 
     // Executed when the async work is complete
     // this function will be run inside the main event loop
     // so it is safe to use V8 again
     void HandleOKCallback () {
-        Nan::HandleScope scope;
-        Local<Value> argv[1] = { New<Boolean>(isSuccess) };
-        callback->Call(2, argv);
+      Nan::HandleScope scope;
+      Local<Value> argv[1] = { New<Boolean>(isSuccess) };
+      callback->Call(2, argv);
     }
 
   private:
     HWND window;
-	bool isMaximize;
+    bool isMaximize;
     bool isSuccess;
 };
 

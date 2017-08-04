@@ -9,5 +9,10 @@ using namespace v8;
 using namespace Nan;
 
 NAN_METHOD(GetCurrentKeyboardLanguage) {
-
+  GUITHREADINFO Gti;
+  ::ZeroMemory ( &Gti,sizeof(GUITHREADINFO));
+  Gti.cbSize = sizeof(GUITHREADINFO);
+  ::GetGUIThreadInfo(0, &Gti);
+  DWORD dwThread = ::GetWindowThreadProcessId(Gti.hwndActive, 0);
+  return ::GetKeyboardLayout(dwThread);
 }
