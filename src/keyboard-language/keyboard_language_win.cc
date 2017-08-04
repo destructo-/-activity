@@ -8,11 +8,13 @@
 using namespace v8;
 using namespace Nan;
 
-string currentKeyboardLanguage () {
+string currentKeyboardLanguage(void) {
   GUITHREADINFO Gti;
   ::ZeroMemory ( &Gti,sizeof(GUITHREADINFO));
   Gti.cbSize = sizeof(GUITHREADINFO);
   ::GetGUIThreadInfo(0, &Gti);
   DWORD dwThread = ::GetWindowThreadProcessId(Gti.hwndActive, 0);
-  return ::GetKeyboardLayout(dwThread);
+  CString strName;
+  return strName.Format(_T("&#37;08X"), ::GetKeyboardLayout(dwThread));
+
 }
