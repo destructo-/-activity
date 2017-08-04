@@ -17,7 +17,8 @@ NAN_METHOD(GetLastInputTime) {
 }
 
 NAN_METHOD(GetCurrentKeyboardLanguage) {
-  info.GetReturnValue().Set(currentKeyboardLanguage);
+	currentKeyboardLanguage();
+  info.GetReturnValue().Set(1);
 }
 
 NAN_MODULE_INIT(InitAll) {

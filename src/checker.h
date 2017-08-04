@@ -3,4 +3,4 @@
 #define LIN 3
 
 int LastInputTime(void);
-HKL WINAPI currentKeyboardLanguage(void);
+void currentKeyboardLanguage(void);

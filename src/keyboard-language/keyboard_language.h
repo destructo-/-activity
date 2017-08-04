@@ -8,6 +8,10 @@
 */
 
 #include <nan.h>
+#include <windows.h>
+#include <node.h>
+#include <iostream>
+#include <string.h>
 
 NAN_METHOD(GetCurrentKeyboardLanguage);
 
